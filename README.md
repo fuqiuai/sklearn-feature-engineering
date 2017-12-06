@@ -46,7 +46,7 @@
 
 #### 2.1.1 标准化（对列向量处理）
 将服从正态分布的特征值转换成标准正态分布，标准化需要计算特征的均值和标准差，公式表达为：
-![](http://images2015.cnblogs.com/blog/927391/201605/927391-20160502113957732-1062097580.png)
+<br>![](http://images2015.cnblogs.com/blog/927391/201605/927391-20160502113957732-1062097580.png)
 <br>使用preproccessing库的StandardScaler类对数据进行标准化的代码如下：
 ```
 1 from sklearn.preprocessing import StandardScaler
@@ -57,7 +57,7 @@
 
 #### 2.1.2 区间缩放（对列向量处理）
 区间缩放法的思路有多种，常见的一种为利用两个最值进行缩放，公式表达为：
-![](http://images2015.cnblogs.com/blog/927391/201605/927391-20160502113301013-1555489078.png)
+<br>![](http://images2015.cnblogs.com/blog/927391/201605/927391-20160502113301013-1555489078.png)
 <br>使用preproccessing库的MinMaxScaler类对数据进行区间缩放的代码如下：
 ```
 1 from sklearn.preprocessing import MinMaxScaler
@@ -68,7 +68,7 @@
 
 #### 2.1.3 归一化（对行向量处理）
 归一化目的在于样本向量在点乘运算或其他核函数计算相似性时，拥有统一的标准，也就是说都转化为“单位向量”。规则为l2的归一化公式如下：
-![](http://images2015.cnblogs.com/blog/927391/201607/927391-20160719002904919-1602367496.png)
+<br>![](http://images2015.cnblogs.com/blog/927391/201607/927391-20160719002904919-1602367496.png)
 <br>使用preproccessing库的Normalizer类对数据进行归一化的代码如下：
 ```
 1 from sklearn.preprocessing import Normalizer
@@ -79,7 +79,7 @@
 
 ### 2.2 二值化
 定量特征二值化的核心在于设定一个阈值，大于阈值的赋值为1，小于等于阈值的赋值为0，公式表达如下：
-![](http://images2015.cnblogs.com/blog/927391/201605/927391-20160502115121216-456946808.png)
+<br>![](http://images2015.cnblogs.com/blog/927391/201605/927391-20160502115121216-456946808.png)
 <br>使用preproccessing库的Binarizer类对数据进行二值化的代码如下：
 ```
 1 from sklearn.preprocessing import Binarizer
@@ -113,7 +113,7 @@
 
 #### 2.5.1 多项式变换（对行向量处理）
 常见的数据变换有基于多项式的、基于指数函数的、基于对数函数的。4个特征，度为2的多项式转换公式如下：
-![](http://images2015.cnblogs.com/blog/927391/201605/927391-20160502134944451-270339895.png)
+<br>![](http://images2015.cnblogs.com/blog/927391/201605/927391-20160502134944451-270339895.png)
 <br>使用preproccessing库的PolynomialFeatures类对数据进行多项式转换的代码如下：
 ```
 1 from sklearn.preprocessing import PolynomialFeatures
@@ -135,16 +135,16 @@
 ```
 
 ### 总结
-类 | 功能 | 说明
-- | :-: | -: 
-StandardScaler | 无量纲化 | 标准化，基于特征矩阵的列，将特征值转换至服从标准正态分布
-MinMaxScaler | 无量纲化 | 区间缩放，基于最大最小值，将特征值转换到[0, 1]区间上
-Normalizer | 归一化 | 基于特征矩阵的行，将样本向量转换为“单位向量”
-Binarizer | 二值化 | 基于给定阈值，将定量特征按阈值划分
-OneHotEncoder | 哑编码 | 将定性数据编码为定量数据
-Imputer | 缺失值计算 | 计算缺失值，缺失值可填充为均值等
-PolynomialFeatures | 多项式数据转换 | 多项式数据转换
-FunctionTransformer | 自定义单元数据转换 | 使用单变元的函数来转换数据
+|类 | 功能 | 说明|
+|- | :-: | -: |
+|StandardScaler | 无量纲化 | 标准化，基于特征矩阵的列，将特征值转换至服从标准正态分布|
+|MinMaxScaler | 无量纲化 | 区间缩放，基于最大最小值，将特征值转换到[0, 1]区间上|
+|Normalizer | 归一化 | 基于特征矩阵的行，将样本向量转换为“单位向量”||
+|Binarizer | 二值化 | 基于给定阈值，将定量特征按阈值划分|
+|OneHotEncoder | 哑编码 | 将定性数据编码为定量数据|
+|Imputer | 缺失值计算 | 计算缺失值，缺失值可填充为均值等|
+|PolynomialFeatures | 多项式数据转换 | 多项式数据转换|
+|FunctionTransformer | 自定义单元数据转换 | 使用单变元的函数来转换数据|
 
 ## <a name="3">3. 特征选择</a>
 
