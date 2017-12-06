@@ -223,4 +223,33 @@
 |SelectFromModel	|Embedded	|训练基模型，选择权值系数较高的特征
 
 ## <a name="4">4. 降维</a>
+当特征选择完成后，可以直接训练模型了，但是可能由于特征矩阵过大，导致计算量大，训练时间长的问题，因此降低特征矩阵维度也是必不可少的。常见的降维方法除了以上提到的基于L1惩罚项的模型以外，另外还有主成分分析法（PCA）和线性判别分析（LDA），线性判别分析本身也是一个分类模型。PCA和LDA有很多的相似点，其本质是要将原始的样本映射到维度更低的样本空间中，但是PCA和LDA的映射目标不一样：**PCA是为了让映射后的样本具有最大的发散性；而LDA是为了让映射后的样本有最好的分类性能**。所以说PCA是一种无监督的降维方法，而LDA是一种有监督的降维方法。
 
+### 4.1 主成分分析法（PCA）
+使用decomposition库的PCA类选择特征的代码如下：
+```
+1 from sklearn.decomposition import PCA
+2 
+3 #主成分分析法，返回降维后的数据
+4 #参数n_components为主成分数目
+5 PCA(n_components=2).fit_transform(iris.data)
+```
+
+### 4.2 线性判别分析法（LDA）
+使用LDA进行降维的代码如下：
+```
+1 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+2 
+3 #线性判别分析法，返回降维后的数据
+4 #参数n_components为降维后的维数
+5 LDA(n_components=2).fit_transform(iris.data, iris.target)
+```
+
+### 总结
+|库 | 类 | 说明|
+|- | :-: | -: |
+|decomposition	|PCA	|主成分分析法
+|lda	|LDA	|线性判别分析法
+
+
+<br><br>*注：以上代码均在[feature_engineering.py](https://github.com/fuqiuai/kaggle-feature-engineering/blob/master/feature_engineering.py)中实现*

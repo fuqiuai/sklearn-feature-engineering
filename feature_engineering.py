@@ -15,6 +15,8 @@ from sklearn import preprocessing
 from sklearn import feature_selection
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 
 if __name__ == '__main__':
 
@@ -64,19 +66,27 @@ if __name__ == '__main__':
     '''
     2.特征选择
     '''
-
-    # 3.1 Filter
-    # 3.1.1 方差选择法，选择方差大于阈值的特征
+    # 2.1 Filter
+    # 2.1.1 方差选择法，选择方差大于阈值的特征
     features_new = feature_selection.VarianceThreshold(threshold=0.3).fit_transform(features)
-    # 3.1.2 卡方检验,选择K个与标签最相关的特征
+    # 2.1.2 卡方检验,选择K个与标签最相关的特征
     features_new = feature_selection.SelectKBest(feature_selection.chi2, k=3).fit_transform(features, labels)
 
-    # 3.2 Wrapper
-    # 3.2.1 递归特征消除法，这里选择逻辑回归作为基模型，n_features_to_select为选择的特征个数
+    # 2.2 Wrapper
+    # 2.2.1 递归特征消除法，这里选择逻辑回归作为基模型，n_features_to_select为选择的特征个数
     features_new = feature_selection.RFE(estimator=LogisticRegression(), n_features_to_select=2).fit_transform(features, labels)
 
-    # 3.3 Embedded
-    # 3.3.1 基于惩罚项的特征选择法,这里选择带L1惩罚项的逻辑回归作为基模型
+    # 2.3 Embedded
+    # 2.3.1 基于惩罚项的特征选择法,这里选择带L1惩罚项的逻辑回归作为基模型
     features_new = feature_selection.SelectFromModel(LogisticRegression(penalty="l1", C=0.1)).fit_transform(features, labels)
-    # 3.3.2 基于树模型的特征选择法,这里选择GBDT模型作为基模型
+    # 2.3.2 基于树模型的特征选择法,这里选择GBDT模型作为基模型
     features_new = feature_selection.SelectFromModel(GradientBoostingClassifier()).fit_transform(features, labels)
+
+    '''
+    3.降维
+    '''
+    # 3.1 主成分分析法（PCA）,参数n_components为降维后的维数
+    features_new = PCA(n_components=2).fit_transform(features)
+
+    # 3.2 线性判别分析法（LDA）,参数n_components为降维后的维数
+    features_new = LDA(n_components=2).fit_transform(features, labels)
