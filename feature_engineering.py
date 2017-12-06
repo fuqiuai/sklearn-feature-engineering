@@ -40,7 +40,10 @@ if __name__ == '__main__':
 
     # 1.3 对定性（分类）特征编码
     enc = preprocessing.OneHotEncoder()
-    enc.fit([[0, 0, 3], [1, 1, 0], [0, 2, 1], [1, 0, 2]])
+    enc.fit([[0, 0, 3],
+             [1, 1, 0],
+             [0, 2, 1],
+             [1, 0, 2]])
     # print(enc.transform([[0, 1, 3]]))
     # print(enc.transform([[0, 1, 3]]).toarray())
 
@@ -51,7 +54,7 @@ if __name__ == '__main__':
     # 1.5 数据变换
     # 1.5.1 基于多项式变换（对行变量处理）
     features_new = preprocessing.PolynomialFeatures().fit_transform(features)
-    # 1.5.2 基于自定义函数变换（对行变量处理），以log函数为例
+    # 1.5.2 基于自定义函数变换，以log函数为例
     features_new = preprocessing.FunctionTransformer(np.log1p).fit_transform(features)
 
 
