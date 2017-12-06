@@ -32,15 +32,11 @@ if __name__ == '__main__':
     # print(np.std(features_new, axis=0))
     # 1.1.2 区间缩放：将特征值缩放到[0, 1]区间的数据（对列向量处理）
     features_new = preprocessing.MinMaxScaler().fit_transform(features)
-    # print(features_new)
     # 1.1.3 归一化：将行向量转化为“单位向量”（对每个样本处理）
     features_new = preprocessing.Normalizer().fit_transform(features)
-    # print(features_new)
 
     # 1.2 对定量特征二值化:设定一个阈值，大于阈值的赋值为1，小于等于阈值的赋值为0
-    # print(features)
     features_new = preprocessing.Binarizer(threshold=3).fit_transform(features)
-    # print(features_new)
 
     # 1.3 对定性（分类）特征编码
     enc = preprocessing.OneHotEncoder()
@@ -49,7 +45,14 @@ if __name__ == '__main__':
     # print(enc.transform([[0, 1, 3]]).toarray())
 
     # 1.4 缺失值计算
-    # print(features)
     imp = preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0)
     features_new = imp.fit_transform(vstack((array([nan, nan, nan, nan]), features)))
-    # print(features_new)
+
+    # 1.5 数据变换
+    # 1.5.1 基于多项式变换（对行变量处理）
+    features_new = preprocessing.PolynomialFeatures().fit_transform(features)
+    # 1.5.2 基于自定义函数变换（对行变量处理），以log函数为例
+    features_new = preprocessing.FunctionTransformer(np.log1p).fit_transform(features)
+
+
+
