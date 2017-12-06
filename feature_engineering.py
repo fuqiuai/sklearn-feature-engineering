@@ -10,7 +10,11 @@ import pandas as pd
 import numpy as np
 from numpy import vstack, array, nan
 from sklearn.datasets import load_iris
+
 from sklearn import preprocessing
+from sklearn import feature_selection
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import GradientBoostingClassifier
 
 if __name__ == '__main__':
 
@@ -57,5 +61,22 @@ if __name__ == '__main__':
     # 1.5.2 基于自定义函数变换，以log函数为例
     features_new = preprocessing.FunctionTransformer(np.log1p).fit_transform(features)
 
+    '''
+    2.特征选择
+    '''
 
+    # 3.1 Filter
+    # 3.1.1 方差选择法，选择方差大于阈值的特征
+    features_new = feature_selection.VarianceThreshold(threshold=0.3).fit_transform(features)
+    # 3.1.2 卡方检验,选择K个与标签最相关的特征
+    features_new = feature_selection.SelectKBest(feature_selection.chi2, k=3).fit_transform(features, labels)
 
+    # 3.2 Wrapper
+    # 3.2.1 递归特征消除法，这里选择逻辑回归作为基模型，n_features_to_select为选择的特征个数
+    features_new = feature_selection.RFE(estimator=LogisticRegression(), n_features_to_select=2).fit_transform(features, labels)
+
+    # 3.3 Embedded
+    # 3.3.1 基于惩罚项的特征选择法,这里选择带L1惩罚项的逻辑回归作为基模型
+    features_new = feature_selection.SelectFromModel(LogisticRegression(penalty="l1", C=0.1)).fit_transform(features, labels)
+    # 3.3.2 基于树模型的特征选择法,这里选择GBDT模型作为基模型
+    features_new = feature_selection.SelectFromModel(GradientBoostingClassifier()).fit_transform(features, labels)

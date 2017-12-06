@@ -39,7 +39,7 @@
 - 存在缺失值：**填充缺失值**。
 - 信息利用率低：不同的机器学习算法和模型对数据中信息的利用是不同的，之前提到在线性模型中，使用对定性特征哑编码可以达到非线性的效果。类似地，对定量变量多项式化，或者进行其他的**数据变换**，都能达到非线性的效果。
 
-我们使用sklearn中的preproccessing库来进行数据预处理，可以覆盖以上问题的解决方案。
+我们使用sklearn中的preproccessing库来进行数据预处理。
 
 ### 2.1 无量纲化
 无量纲化使不同规格的数据转换到同一规格
@@ -147,7 +147,80 @@
 |FunctionTransformer | 自定义单元数据转换 | 使用单变元的函数来转换数据|
 
 ## <a name="3">3. 特征选择</a>
+当数据预处理完成后，我们需要选择有意义的特征输入机器学习的算法和模型进行训练。通常来说，从两个方面考虑来选择特征：
 
+- 特征是否发散：如果一个特征不发散，例如方差接近于0，也就是说样本在这个特征上基本上没有差异，这个特征对于样本的区分并没有什么用。
+- 特征与目标的相关性：这点比较显见，与目标相关性高的特征，应当优选选择。除方差法外，本文介绍的其他方法均从相关性考虑。
+
+根据特征选择的形式又可以将特征选择方法分为3种：
+
+- **Filter：过滤法**，不用考虑后续学习器，按照发散性或者相关性对各个特征进行评分，设定阈值或者待选择阈值的个数，选择特征。
+- **Wrapper：包装法**，需考虑后续学习器，根据目标函数（通常是预测效果评分），每次选择若干特征，或者排除若干特征。
+- **Embedded：嵌入法**，是Filter与Wrapper方法的结合。先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据系数从大到小选择特征。
+
+我们使用sklearn中的feature_selection库来进行特征选择。
+
+### 3.1 Filter
+#### 3.1.1 方差选择法
+使用方差选择法，先要计算各个特征的方差，然后根据阈值，选择方差大于阈值的特征。使用feature_selection库的VarianceThreshold类来选择特征的代码如下：
+```
+1 from sklearn.feature_selection import VarianceThreshold
+2 
+3 #方差选择法，返回值为特征选择后的数据
+4 #参数threshold为方差的阈值
+5 VarianceThreshold(threshold=3).fit_transform(iris.data)
+```
+
+#### 3.1.2 卡方检验
+检验特征对标签的相关性，选择其中K个与标签最相关的特征。使用feature_selection库的SelectKBest类结合卡方检验来选择特征的代码如下：
+```
+1 from sklearn.feature_selection import SelectKBest
+2 from sklearn.feature_selection import chi2
+3 
+4 #选择K个最好的特征，返回选择特征后的数据
+5 SelectKBest(chi2, k=2).fit_transform(iris.data, iris.target)
+```
+
+### 3.2 Wrapper
+#### 3.2.1 递归特征消除法
+递归消除特征法使用一个基模型来进行多轮训练，每轮训练后，消除若干权值系数的特征，再基于新的特征集进行下一轮训练。使用feature_selection库的RFE类来选择特征的代码如下：
+```
+1 from sklearn.feature_selection import RFE
+2 from sklearn.linear_model import LogisticRegression
+3 
+4 #递归特征消除法，返回特征选择后的数据
+5 #参数estimator为基模型
+6 #参数n_features_to_select为选择的特征个数
+7 RFE(estimator=LogisticRegression(), n_features_to_select=2).fit_transform(iris.data, iris.target)
+```
+
+### 3.3 Embedded
+#### 3.3.1 基于惩罚项的特征选择法
+使用带惩罚项的基模型，除了筛选出特征外，同时也进行了降维。使用feature_selection库的SelectFromModel类结合带L1惩罚项的逻辑回归模型，来选择特征的代码如下：
+```
+1 from sklearn.feature_selection import SelectFromModel
+2 from sklearn.linear_model import LogisticRegression
+3 
+4 #带L1惩罚项的逻辑回归作为基模型的特征选择
+5 SelectFromModel(LogisticRegression(penalty="l1", C=0.1)).fit_transform(iris.data, iris.target)
+```
+#### 3.3.2 基于树模型的特征选择法
+树模型中GBDT可用来作为基模型进行特征选择，使用feature_selection库的SelectFromModel类结合GBDT模型，来选择特征的代码如下：
+```
+1 from sklearn.feature_selection import SelectFromModel
+2 from sklearn.ensemble import GradientBoostingClassifier
+3 
+4 #GBDT作为基模型的特征选择
+5 SelectFromModel(GradientBoostingClassifier()).fit_transform(iris.data, iris.target)
+```
+
+### 总结
+|类 | 所属方式 | 说明|
+|- | :-: | -: |
+|VarianceThreshold	|Filter	|方差选择法
+|SelectKBest	|Filter	|可选关联系数、卡方校验、最大信息系数作为得分计算的方法
+|RFE	|Wrapper	|递归地训练基模型，将权值系数较小的特征从特征集合中消除
+|SelectFromModel	|Embedded	|训练基模型，选择权值系数较高的特征
 
 ## <a name="4">4. 降维</a>
 
