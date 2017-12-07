@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # 1.2 对定量特征二值化:设定一个阈值，大于阈值的赋值为1，小于等于阈值的赋值为0
     features_new = preprocessing.Binarizer(threshold=3).fit_transform(features)
 
-    # 1.3 对定性（分类）特征编码
+    # 1.3 对定性（分类）特征编码(也可用pandas.get_dummies函数)
     enc = preprocessing.OneHotEncoder()
     enc.fit([[0, 0, 3],
              [1, 1, 0],
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     # print(enc.transform([[0, 1, 3]]))
     # print(enc.transform([[0, 1, 3]]).toarray())
 
-    # 1.4 缺失值计算
+    # 1.4 缺失值计算(也可用pandas.fillna函数)
     imp = preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0)
     features_new = imp.fit_transform(vstack((array([nan, nan, nan, nan]), features)))
 
