@@ -1,5 +1,5 @@
 # kaggle-feature-engineering
-使用sklearn做特征工程
+使用sklearn做特征工程。大家也可以到我的博客上看，[https://blog.csdn.net/fuqiuai/article/details/79496005](https://blog.csdn.net/fuqiuai/article/details/79496005)
 
 #### <a href="#1">1. 什么是特征工程？</a>
 #### <a href="#2">2. 数据预处理</a>
