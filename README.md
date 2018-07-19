@@ -15,7 +15,7 @@
 1. **特征选择** 对应的sklearn包： [sklearn-Feature selection](http://scikit-learn.org/stable/modules/feature_selection.html)
 1. **降维** 对应的sklearn包： [sklearn-Dimensionality reduction](http://scikit-learn.org/stable/modules/decomposition.html#decompositions)
 
-<br>本文中使用sklearn中的IRIS（鸢尾花）数据集来对特征处理功能进行说明导入IRIS数据集的代码如下：
+<br>本文中使用sklearn中的IRIS（鸢尾花）数据集来对特征处理功能进行说明，首先导入IRIS数据集的代码如下：
 ```
  1 from sklearn.datasets import load_iris
  2 
